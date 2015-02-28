@@ -1,0 +1,7 @@
+--requirement base
+bumpversion
+mock
+pytest
+pytest-capturelog
+pytest-cov
+tox

@@ -1,0 +1,4 @@
+attrs>=15.0.0a1
+colorlog
+docker-py
+pyyaml
