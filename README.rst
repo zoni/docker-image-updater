@@ -15,6 +15,9 @@ using::
 
     pip install docker-image-updater
 
+Installation into a `virtualenv <https://virtualenv.pypa.io/en/latest/>`_
+is highly recommended!
+
 
 Usage
 -----
@@ -31,6 +34,27 @@ Usage
 Docker image updater requires a configuration file to specify which
 images to watch and what commands to execute. By default it will look
 for `/etc/docker-image-updater.yml` in the current directory.
+
+Recommended usage is to run docker image updater from cron, using
+something like `cronic <http://habilis.net/cronic/>_` to receive mail
+only in case of errors.
+
+
+Example output
+--------------
+
+::
+
+    # docker-image-updater
+    22:13:04 INFO     Updater    Checking images in set jenkins
+    22:13:04 INFO     Updater    Updating image zoni/jenkins
+    22:13:04 INFO     Updater    Pulling image zoni/jenkins
+    ...........................................................................................................................................................................................................................................................................................................................
+    22:14:50 INFO     Updater    Image zoni/jenkins updated to latest version
+    22:14:50 INFO     Updater    Running command: supervisorctl restart jenkins
+    jenkins: stopped
+    jenkins: started
+    22:14:54 INFO     Updater    Command exited successfully
 
 
 Configuration format
@@ -79,6 +103,15 @@ commands returned status code 0.
 If an image fails to update or one or more defined commands exits with
 a non-zero exit status then docker image updater will itself exit with
 status 1.
+
+
+Star me
+-------
+
+If you use this software, please consider
+`starring <https://github.com/zoni/docker-image-updater/stargazers>`_
+it on GitHub. This will give me some idea of how much it is used by
+other people.
 
 
 License
