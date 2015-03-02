@@ -1,3 +1,5 @@
+from __future__ import print_function, absolute_import, unicode_literals, division
+
 import argparse
 import sys
 import logging
@@ -61,7 +63,11 @@ class Application(object):
         :param file:
             Path of the file to parse
         """
-        data = yaml.safe_load(open(file))
+        try:
+            data = yaml.safe_load(open(file))
+        except IOError as e:
+            print(str(e), file=sys.stderr)
+            sys.exit(1)
         self.config = data.get('config', {})
         for key, value in data['watch'].items():
             self.containerset.append(ContainerSet(name=key, **value))
