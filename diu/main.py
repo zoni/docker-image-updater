@@ -44,7 +44,7 @@ class Application(object):
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "-f", "--file",
-            default="config.yml",
+            default="/etc/docker-image-updater.yml",
             help="the config file to use"
         )
         parser.add_argument(

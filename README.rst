@@ -30,7 +30,7 @@ Usage
 
 Docker image updater requires a configuration file to specify which
 images to watch and what commands to execute. By default it will look
-for `config.yml` in the current directory.
+for `/etc/docker-image-updater.yml` in the current directory.
 
 
 Configuration format
