@@ -114,6 +114,13 @@ it on GitHub. This will give me some idea of how much it is used by
 other people.
 
 
+Related projects
+----------------
+
+* `docker-puller <https://github.com/glowdigitalmedia/docker-puller>`_
+* `DockerHub Webhook Listener <https://github.com/cpuguy83/dockerhub-webhook-listener>`_
+
+
 License
 -------
 
