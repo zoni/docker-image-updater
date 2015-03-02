@@ -16,7 +16,7 @@ def read_requirements(file):
 
 setup(
     name="docker-image-updater",
-    version="0.0.1",
+    version="0.0.2",
     author="Nick Groenen",
     author_email="nick@groenen.me",
     description="Update docker images and trigger commands in response to updates",
