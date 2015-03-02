@@ -33,10 +33,10 @@ Usage
 
 Docker image updater requires a configuration file to specify which
 images to watch and what commands to execute. By default it will look
-for `/etc/docker-image-updater.yml` in the current directory.
+for `/etc/docker-image-updater.yml`.
 
 Recommended usage is to run docker image updater from cron, using
-something like `cronic <http://habilis.net/cronic/>_` to receive mail
+something like `cronic <http://habilis.net/cronic/>`_ to receive mail
 only in case of errors.
 
 
