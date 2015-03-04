@@ -4,6 +4,8 @@ python:
   - "3.3"
   - "3.4"
 install:
-  - pip install -r requirements/development
+  - pip install -r requirements/development python-coveralls
 script:
   - make testlocal
+after_success:
+  - coveralls

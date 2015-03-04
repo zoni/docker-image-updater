@@ -7,6 +7,9 @@ containers or trigger other custom behaviour.*
 
 .. image:: https://travis-ci.org/zoni/docker-image-updater.svg?branch=master
     :target: https://travis-ci.org/zoni/docker-image-updater
+.. image:: https://coveralls.io/repos/zoni/docker-image-updater/badge.svg?branch=master
+    :target: https://coveralls.io/r/zoni/docker-image-updater
+
 
 Installation
 ------------
