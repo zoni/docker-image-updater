@@ -5,6 +5,8 @@ Docker image updater
 arbitrary commands when an image is updated, in order to restart running
 containers or trigger other custom behaviour.*
 
+.. image:: https://travis-ci.org/zoni/docker-image-updater.svg?branch=master
+    :target: https://travis-ci.org/zoni/docker-image-updater
 
 Installation
 ------------
