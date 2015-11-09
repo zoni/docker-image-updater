@@ -8,8 +8,14 @@ python:
   - "pypy"
   - "pypy3"
   - "nightly"
+
 install:
-  - pip install -r requirements/development python-coveralls
+  - pip install -U -r requirements/development python-coveralls
+  # inspect.getargspec is removed with Python 3.6 onwards, not all libraries like this yet.
+  - env | grep TRAVIS_PYTHON_VERSION
+  - if [[ $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then pip install -U 'coverage>=4.0.2'; fi
+  # There's no pypi release for pep8 that works with 3.6 at the time of this writing
+  - if [[ $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then pip install -U https://github.com/PyCQA/pep8/archive/master.zip; fi
 script:
   - make testlocal
 after_success:
