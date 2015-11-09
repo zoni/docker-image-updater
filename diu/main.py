@@ -5,6 +5,7 @@ import sys
 import logging
 import yaml
 
+from diu.merge import merge
 from diu.updater import ContainerSet, Updater
 from docker import Client as DockerClient
 
@@ -31,7 +32,15 @@ class Application(object):
             logging.getLogger().setLevel(logging.DEBUG)
 
         self.containerset = []
-        self._load_config(self.args.file)
+
+        if self.args.deprecated_file is not None:
+            self.logger.warning(
+                "--file is deprecated, please migrate to using positional"
+                " arguments instead"
+            )
+            self._load_config(self.args.deprecated_file)
+        else:
+            self._load_config(*self.args.file)
 
         d = DockerClient(**self.config.get('docker', {}))
         self.updater = Updater(d, self.containerset)
@@ -46,30 +55,42 @@ class Application(object):
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "-f", "--file",
-            default="/etc/docker-image-updater.yml",
-            help="the config file to use"
+            dest="deprecated_file",
+            metavar="FILE",
+            default=None,
+            help="deprecated - this flag will be removed in the future",
         )
         parser.add_argument(
             "--debug",
             action="store_true",
             help="show debug messages"
         )
+        parser.add_argument(
+            "file",
+            help="configuration file(s) to use",
+            nargs="*",
+            default=("/etc/docker-image-updater.yml",),
+        )
         return parser
 
-    def _load_config(self, file):
+    def _load_config(self, *files):
         """
         Load and parse the given configuration file.
 
-        :param file:
-            Path of the file to parse
+        :param files:
+            One or more sets of configuration files to load.
         """
-        try:
-            data = yaml.safe_load(open(file))
-        except IOError as e:
-            print(str(e), file=sys.stderr)
-            sys.exit(1)
-        self.config = data.get('config', {})
-        for key, value in data['watch'].items():
+        merged_data = {}
+        for f in files:
+            try:
+                data = yaml.safe_load(open(f))
+            except IOError as e:
+                print(str(e), file=sys.stderr)
+                sys.exit(1)
+            merged_data = merge(merged_data, data)
+
+        self.config = merged_data.get('config', {})
+        for key, value in merged_data['watch'].items():
             self.containerset.append(ContainerSet(name=key, **value))
 
     def run(self):

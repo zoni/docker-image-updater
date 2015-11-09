@@ -29,16 +29,25 @@ Usage
 
 ::
 
-    usage: docker-image-updater [-h] [-f FILE] [--debug]
+    usage: docker-image-updater [-h] [-f FILE] [--debug] [file [file ...]]
+
+    positional arguments:
+      file                  configuration file(s) to use
 
     optional arguments:
       -h, --help            show this help message and exit
-      -f FILE, --file FILE  the config file to use
+      -f FILE, --file FILE  deprecated - this flag will be removed in the future
       --debug               show debug messages
 
-Docker image updater requires a configuration file to specify which
-images to watch and what commands to execute. By default it will look
-for `/etc/docker-image-updater.yml`.
+
+Docker image updater requires one or more configuration files which specify
+sets of images to watch and commands to execute. By default it will look
+for `/etc/docker-image-updater.yml` but you may give one or more alternate
+files on the command-line.
+
+When specifying more than one configuration file, the settings will be
+merged together with items from the latter configuration file(s) overwriting
+items from earlier files.
 
 Recommended usage is to run docker image updater from cron, using
 something like `cronic <http://habilis.net/cronic/>`_ to receive mail

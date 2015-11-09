@@ -25,7 +25,51 @@ class TestApplication(object):
                 }
             }
         yaml.dump(config, f.open('w'))
-        return Application(args=["--file", str(f)])
+        return Application(args=[str(f)])
+
+    @pytest.fixture
+    def multiconfig_app(self, tmpdir):
+        f1 = tmpdir.join("config1.yml")
+        f2 = tmpdir.join("config2.yml")
+
+        config1 = {
+            'config': {
+                'docker': {
+                    'version': '1.16',
+                    'base_url': 'unix://var/run/docker.sock',
+                }
+            },
+            'watch': {
+                'ubuntu': {
+                    'images': ['ubuntu:latest', 'ubuntu:14.04'],
+                    'commands': ['foo', 'bar'],
+                },
+            }
+        }
+        config2 = {
+            'config': {
+                'docker': {
+                    'version': '1.17',
+                    'base_url': 'unix://var/run/docker.sock',
+                }
+            },
+            'watch': {
+                'ubuntu': {
+                    'images': ['ubuntu:latest', 'ubuntu:15.04'],
+                    'commands': ['baz'],
+                },
+                'debian': {
+                    'images': ['debian:squeeze'],
+                    'commands': ['foo']
+                }
+            }
+        }
+
+        yaml.dump(config1, f1.open('w'))
+        yaml.dump(config2, f2.open('w'))
+
+        return Application(args=[str(f1), str(f2)])
+
 
     def test_config_is_loaded_from_config_file(self, app):
         assert app.config == {
@@ -57,3 +101,23 @@ class TestApplication(object):
             version='1.16',
             base_url='unix://var/run/docker.sock'
         )
+
+    def test_config_loading_with_multiple_configs(self, multiconfig_app):
+        app = multiconfig_app
+        assert len(app.containerset) == 2
+        assert isinstance(app.containerset[0], ContainerSet)
+        assert isinstance(app.containerset[1], ContainerSet)
+
+        if app.containerset[0].name == "debian":
+            debian = app.containerset[0]
+            ubuntu = app.containerset[1]
+        else:
+            debian = app.containerset[1]
+            ubuntu = app.containerset[0]
+
+        assert debian.name == "debian"
+        assert debian.images == ['debian:squeeze']
+        assert debian.commands == ['foo']
+        assert ubuntu.name == "ubuntu"
+        assert sorted(ubuntu.images) == sorted(['ubuntu:14.04', 'ubuntu:latest', 'ubuntu:15.04'])
+        assert sorted(ubuntu.commands) == sorted(['baz', 'foo', 'bar'])
