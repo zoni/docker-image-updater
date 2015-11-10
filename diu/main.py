@@ -80,18 +80,48 @@ class Application(object):
         :param files:
             One or more sets of configuration files to load.
         """
-        merged_data = {}
+        final_config = {'config': {}, 'watch': {}}
         for f in files:
             try:
                 data = yaml.safe_load(open(f))
-            except IOError as e:
-                print(str(e), file=sys.stderr)
+            except (IOError, yaml.parser.ParserError) as e:
+                print("Error loading {f}: {e!s}".format(f=f, e=e), file=sys.stderr)
                 sys.exit(1)
-            merged_data = merge(merged_data, data)
+            try:
+                final_config = merge(final_config, data)
+            except ValueError as e:
+                print(
+                    "You have an error in the configuration file {f}: {e!s}".format(f=f, e=e),
+                    file=sys.stderr
+                )
+                sys.exit(1)
 
-        self.config = merged_data.get('config', {})
-        for key, value in merged_data['watch'].items():
-            self.containerset.append(ContainerSet(name=key, **value))
+        self.config = final_config['config']
+        for key, value in final_config['watch'].items():
+            try:
+                self._validate_watch_configuration(value)
+            except ValueError as e:
+                print(
+                    "You have an error in the configuration file {f}: {e!s}".format(f=f, e=e),
+                    file=sys.stderr
+                )
+                sys.exit(1)
+            self.containerset.append(ContainerSet(
+                name=key,
+                images=value.get('images', []),
+                commands=value.get('commands', []),
+            ))
+
+    def _validate_watch_configuration(self, watch):
+        """
+        Validate the structure of a 'watch' statement.
+        """
+        if not isinstance(watch, dict):
+            raise ValueError("Key 'watch' should be a dictionary")
+        if not isinstance(watch.get('images', []), list):
+            raise ValueError("Key 'images' should be of type list")
+        if not isinstance(watch.get('commands', []), list):
+            raise ValueError("Key 'commands' should be of type list")
 
     def run(self):
         """

@@ -15,8 +15,8 @@ def merge(a, b):
     if type(a) != type(b):
         raise ValueError(
             "Trying to merge two different types of data:\n"
-            "a (type {a_type} = {a_value}\n\n"
-            "b (type {b_type} = {b_value}\n".format(
+            "Value A {a_type} = {a_value}\n\n"
+            "Value B {b_type} = {b_value}\n".format(
                 a_type=type(a),
                 a_value=a,
                 b_type=type(b),

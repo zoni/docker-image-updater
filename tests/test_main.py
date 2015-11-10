@@ -121,3 +121,18 @@ class TestApplication(object):
         assert ubuntu.name == "ubuntu"
         assert sorted(ubuntu.images) == sorted(['ubuntu:14.04', 'ubuntu:latest', 'ubuntu:15.04'])
         assert sorted(ubuntu.commands) == sorted(['baz', 'foo', 'bar'])
+
+    def test_shady_configs(self, tmpdir):
+        self.app(tmpdir=tmpdir, config={})
+        self.app(tmpdir=tmpdir, config={'watch': {}})
+        self.app(tmpdir=tmpdir, config={'watch': {"myapp": {}}})
+        with pytest.raises(SystemExit):
+            self.app(tmpdir=tmpdir, config={'config': []})
+        with pytest.raises(SystemExit):
+            self.app(tmpdir=tmpdir, config={'config': "foo"})
+        with pytest.raises(SystemExit):
+            self.app(tmpdir=tmpdir, config={'watch': []})
+        with pytest.raises(SystemExit):
+            self.app(tmpdir=tmpdir, config={'watch': "myapp"})
+        with pytest.raises(SystemExit):
+            self.app(tmpdir=tmpdir, config={'watch': {"myapp": []}})
