@@ -135,6 +135,28 @@ Related projects
 * `DockerHub Webhook Listener <https://github.com/cpuguy83/dockerhub-webhook-listener>`_
 
 
+Changes
+-------
+
+1.0.0 (2015-11-10)
+~~~~~~~~~~~~~~~~~~
+
+* Allow multiple configuration files to be specified (settings will be merged in order)
+* Deprecated the `--file` argument
+* Print friendlier error messages in many cases of incorrect configurations
+
+0.0.2 (2015-03-02)
+~~~~~~~~~~~~~~~~~~
+
+* Friendlier config file load error message
+* Change default config to `/etc/docker-image-updater.yml`
+
+0.0.1 (2015-03-01)
+~~~~~~~~~~~~~~~~~~
+
+* Initial public release.
+
+
 License
 -------
 

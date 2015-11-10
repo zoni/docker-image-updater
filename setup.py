@@ -16,7 +16,7 @@ def read_requirements(file):
 
 setup(
     name="docker-image-updater",
-    version="0.0.2",
+    version="1.0.0",
     author="Nick Groenen",
     author_email="nick@groenen.me",
     description="Update docker images and trigger commands in response to updates",
@@ -26,7 +26,7 @@ setup(
     url="https://github.com/zoni/docker-image-updater",
     install_requires=read_requirements("requirements/base"),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
         "Topic :: System :: Systems Administration",
         "Intended Audience :: System Administrators",
